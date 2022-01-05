@@ -32,15 +32,16 @@
     }
 
     $customer = $_POST['customer'];
-    $colour1 = $_POST['colour_1']; $finish1 = $_POST['finish_1']; $req_date1 = $_POST['req_1'];
-    $colour2 = $_POST['colour_2']; $finish2 = $_POST['finish_2']; $req_date2 = $_POST['req_2'];
-    $colour3 = $_POST['colour_3']; $finish3 = $_POST['finish_3']; $req_date3 = $_POST['req_3'];
-    $colour4 = $_POST['colour_4']; $finish4 = $_POST['finish_4']; $req_date4 = $_POST['req_4'];
-    $colour5 = $_POST['colour_5']; $finish5 = $_POST['finish_5']; $req_date5 = $_POST['req_5'];
+    $colour1 = $_POST['colour_1']; $finish1 = $_POST['finish_1']; $req_date1 = $_POST['req_1']; $qty1 = $_POST['qty_1'];
+    $colour2 = $_POST['colour_2']; $finish2 = $_POST['finish_2']; $req_date2 = $_POST['req_2']; $qty2 = $_POST['qty_2'];
+    $colour3 = $_POST['colour_3']; $finish3 = $_POST['finish_3']; $req_date3 = $_POST['req_3']; $qty3 = $_POST['qty_3'];
+    $colour4 = $_POST['colour_4']; $finish4 = $_POST['finish_4']; $req_date4 = $_POST['req_4']; $qty4 = $_POST['qty_4'];
+    $colour5 = $_POST['colour_5']; $finish5 = $_POST['finish_5']; $req_date5 = $_POST['req_5']; $qty5 = $_POST['qty_5'];
     $PO = $_POST['PO'];
     $colour = [$colour1, $colour2, $colour3, $colour4, $colour5];
     $finish = [$finish1, $finish2, $finish3, $finish4, $finish5];
     $req_date = [$req_date1, $req_date2, $req_date3, $req_date4, $req_date5];
+    $qty = [$qty1, $qty2, $qty3, $qty4, $qty5];
     $i = 0;
     while ($i <= 4) {
 
@@ -58,8 +59,8 @@
             echo $code;
         //Insert Data
         $conn = new mysqli("localhost" , "root" , "", "order");
-        $insert = "INSERT INTO `order_details` (`Customer`,`Order_ID`,`Order_date_time`,`PO`,`Code`,`Colour`,`Finish`,`Req_Date`,`colour_number`)     
-                                          VALUES ('$customer','$order_ID',CURRENT_TIMESTAMP(),'$PO','$code','$colour[$i]','$finish[$i]','$req_date[$i]','$col_num')";
+        $insert = "INSERT INTO `order_details` (`Customer`,`Order_ID`,`Order_date_time`,`PO`,`Code`,`Colour`,`Finish`,`Quantity`,`Req_Date`,`colour_number`)     
+                                          VALUES ('$customer','$order_ID',CURRENT_TIMESTAMP(),'$PO','$code','$colour[$i]','$finish[$i]','$qty[$i]','$req_date[$i]','$col_num')";
         $run = mysqli_query($conn,$insert);
         
         $i++;

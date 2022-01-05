@@ -30,7 +30,7 @@
    <div class="container-fluid">
       <form class="d-flex">
         <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-        <a class="nav-link active" aria-current="page" href="orders.php">Order Status</a>
+        <a class="nav-link active" aria-current="page" href="pending_orders.php">Pending Orders</a>
       </form>
    </div>
 </nav>
