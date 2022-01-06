@@ -33,7 +33,7 @@
            
            $conn = new mysqli($servername , $username , $password, "order");
 
-           $distinct_order_ID = "SELECT DISTINCT `Order_ID`,`Customer` from `order_details` ORDER BY `Order_ID` DESC"; // fetch data from database where limit not approved
+           $distinct_order_ID = "SELECT DISTINCT `Order_ID`,`Customer` from `order_details` WHERE `pending_flag` = 0 ORDER BY `Order_ID` DESC"; // fetch data from database where limit not approved
            $run = mysqli_query($conn, $distinct_order_ID);
            $unique_order_ID = [];
            $customer_details = [];
@@ -76,7 +76,7 @@
                            $password = "";  
 
                            $conn = new mysqli($servername , $username , $password, "order");
-                           $select = "SELECT * FROM `order_details` WHERE `Order_ID` = '$unique_order_ID[$i]'";
+                           $select = "SELECT * FROM `order_details` WHERE `Order_ID` = '$unique_order_ID[$i]' AND `pending_flag` = 0 ";
                            $run = mysqli_query($conn,$select);
 
                            while($data = mysqli_fetch_array($run)){

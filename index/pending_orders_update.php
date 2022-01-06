@@ -8,19 +8,30 @@
 
     if(isset($_REQUEST["order_id"])){
         $order_id = $_REQUEST["order_id"];
-        $query = "SELECT * FROM `order_details` WHERE `Order_ID` = '$order_id'";
+        $query = "SELECT * FROM `order_details` WHERE `Order_ID` = '$order_id' AND `pending_flag` = 0";
         $run = mysqli_query($conn, $query);
         
         $data = mysqli_fetch_array($run);
         $unique_order_ID = $data['Order_ID'];
         $customer_details = $data['Customer'];
-           
+        
+    }
+    
+    
+    
+
+    
+
+
+
+
 
         
-
         //echo $row["Prod_Details"];
-        }
+        //echo $row["Prod_Details"];
 ?>
+
+    
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +62,7 @@
 <br>
 
 <!-- Collapsible Panels -->
-
+<form method="POST">
 <div class="container mt-3" id="cost"> 
     <div class="card">
         <div class="card-header">
@@ -77,8 +88,11 @@
                                $password = "";  
 
                                $conn = new mysqli($servername , $username , $password, "order");
-                               $select = "SELECT * FROM `order_details` WHERE `Order_ID` = '$order_id'";
+                               $select = "SELECT * FROM `order_details` WHERE `Order_ID` = '$order_id' AND `pending_flag` = 0 AND `Cost_flag` = 0";
                                $run = mysqli_query($conn,$select);
+
+                               $cost_per =[];
+                               $colour_number = [];
 
                                while($data = mysqli_fetch_array($run)){
                             ?>
@@ -88,9 +102,35 @@
                                   <td><?php echo $data['Finish']; ?></td>
                                   <td><?php echo $data['Quantity']; ?></td>
                                   <td><input type="number" name="cost_per_<?php echo $data['colour_number']; ?>" placeholder="Cost per kg"></td>
-                                  <!--<td><button type="confirm" name="submit_<?php echo $data['colour_number']; ?>" class="btn btn-outline-primary">Confirm</button></td> -->
+                                  <!--<td><button type="confirm" name="submit_<?php //echo $data['colour_number']; ?>" class="btn btn-outline-primary">Confirm</button></td>-->
                                 </tr>
                             <?php
+                                array_push($cost_per, "cost_per_".$data['colour_number']);
+                                array_push($colour_number,$data['colour_number']);
+                            }
+                            //print_r($cost_per);
+                            //print_r($colour_number);
+                            if(isset($_REQUEST["submit"])){
+                                $cost = [];
+                                $cost_per_len = count($cost_per);
+                                $i = 0;
+                                while ($i<$cost_per_len) {
+                                    array_push($cost, $_REQUEST[$cost_per[$i]]);
+                                    $i++;
+                                    //echo "In first loop";
+                                }
+                                //print_r($cost);
+
+                                $i=0;
+                                while ($i<$cost_per_len) {
+                                    if ($cost[$i] != "" ) {
+                                        $insert = "UPDATE `order_details` SET `Cost` = '$cost[$i]',`Cost_flag` = 1 WHERE `colour_number` = '$colour_number[$i]'";
+                                        $run2 = mysqli_query($conn, $insert);
+                                        //echo "IN second Loop";
+                                    }
+                                    $i++;
+                                }
+                                header("Refresh:0");
                             }
                             ?>
                         </table>
@@ -113,7 +153,7 @@
                 <label for="customer">Limit Status:</label>
                 <div class="col-sm-4">
                     <div class="mb-3">
-                        <select class="form-select" name="limit_status" required>
+                        <select class="form-select" name="limit_status">
                             <option selected></option>
                             <option value="1">Approved</option>
                             <option value="0">Not Approved</option>
@@ -172,7 +212,7 @@
                                $password = "";  
 
                                $conn = new mysqli($servername , $username , $password, "order");
-                               $select = "SELECT * FROM `order_details` WHERE `Order_ID` = '$order_id'";
+                               $select = "SELECT * FROM `order_details` WHERE `Order_ID` = '$order_id' AND `pending_flag` = 0";
                                $run = mysqli_query($conn,$select);
 
                                while($data = mysqli_fetch_array($run)){
@@ -200,12 +240,18 @@
     </div>
 </div>
 
+
 <br>
-<div class="d-grid gap-2 col-4 mx-auto">
-  <button class="btn btn-primary btn-lg" type="button">Submit Approvals</button>
-</div>
+    <div class="d-grid gap-2 col-4 mx-auto">
+        <button type="submit" class="btn btn-primary btn-lg" name="submit">Submit Approvals</button>
+    </div>
 <br>
 <br>
+</form>
+
+<?php
+
+    ?>
 
 </body>
 </html>
